@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
+dotenv.config();
+
 import { server } from "./src/server";
 
-dotenv.config();
 
 (async () => {
   const port = process.env.PORT;
