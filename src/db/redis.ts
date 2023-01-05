@@ -12,6 +12,14 @@ class Redis {
   incrementBy(key: string, increment: number) {
     return this.driver.incrBy(key, increment);
   }
+
+  getTtl(key: string) {
+    return this.driver.ttl(key);
+  }
+
+  setTtl(key: string, ttl: number) {
+    return this.driver.expire(key, ttl);
+  }
 }
 
 const { host, port } = JSON.parse(process.env.REDIS!);
