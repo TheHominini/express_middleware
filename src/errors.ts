@@ -1,5 +1,9 @@
 export class CustomError extends Error {
-   constructor(readonly code:string, readonly statusCode: number, readonly message: string) {
+  constructor(
+    readonly code: string,
+    readonly statusCode: number,
+    readonly message: string
+  ) {
     super(message);
   }
 }
@@ -10,4 +14,4 @@ export const Unauthorized = (message: string) => {
 
 export const RequestSuspended = (message: string) => {
   return new CustomError("RequestSuspended", 403, message);
-}
+};

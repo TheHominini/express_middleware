@@ -1,8 +1,6 @@
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
 
 import { server } from "./src/server";
-
 
 (async () => {
   const port = process.env.PORT;
@@ -10,4 +8,4 @@ import { server } from "./src/server";
   server.listen(port, () => {
     console.log(`Server is running on :${port}`);
   });
-})()
+})();
