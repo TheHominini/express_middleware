@@ -2,7 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { Unauthorized, RequestSuspended } from "../errors";
 import { calculateAttemptAmount } from "../utils";
 
-const { step: TOKEN_STEP, count: TOKEN_LIMIT } = JSON.parse(process.env.TOKEN_LIMIT!);
+const { step: TOKEN_STEP, count: TOKEN_LIMIT } = JSON.parse(
+  process.env.TOKEN_LIMIT!
+);
 const { step: IP_STEP, count: IP_LIMIT } = JSON.parse(process.env.IP_LIMIT!);
 
 const getToken = (req: Request) =>
@@ -16,7 +18,10 @@ const antifraudCheck = (type: string) => {
       case "token":
         const token = getToken(req);
 
-        attemptAmount = await calculateAttemptAmount(`${token}_token`, TOKEN_STEP);
+        attemptAmount = await calculateAttemptAmount(
+          `${token}_token`,
+          TOKEN_STEP
+        );
         if (attemptAmount > TOKEN_LIMIT) {
           throw RequestSuspended("You've reached the limit. Try after 1 hour");
         }
