@@ -38,7 +38,7 @@ describe("validateToken", () => {
     const res: any = {};
     const nextMock = jest.fn();
 
-    validateToken(req, res, nextMock)
+    validateToken(req, res, nextMock);
 
     expect(nextMock).toBeCalled();
   });
