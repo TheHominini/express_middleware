@@ -12,30 +12,34 @@ const getToken = (req: Request) =>
 
 const antifraudCheck = (type: string) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    let attemptAmount: number;
+    try {
+      let attemptAmount: number;
 
-    switch (type) {
-      case "token":
-        const token = getToken(req);
+      switch (type) {
+        case "token":
+          const token = getToken(req);
 
-        attemptAmount = await calculateAttemptAmount(
-          `${token}_token`,
-          TOKEN_STEP
-        );
-        if (attemptAmount > TOKEN_LIMIT) {
-          throw RequestSuspended("You've reached the limit. Try after 1 hour");
-        }
-        break;
-      default:
-        const ip = req.headers["x-forwarded-for"] ?? "localhost";
+          attemptAmount = await calculateAttemptAmount(
+            `${token}_token`,
+            TOKEN_STEP
+          );
+          if (attemptAmount > TOKEN_LIMIT) {
+            throw RequestSuspended("You've reached the limit. Try after 1 hour");
+          }
+          break;
+        default:
+          const ip = req.headers["x-forwarded-for"] ?? "localhost";
 
-        attemptAmount = await calculateAttemptAmount(`${ip}_ip`, IP_STEP);
-        if (attemptAmount > IP_LIMIT) {
-          throw RequestSuspended("You've reached the limit. Try after 1 hour");
-        }
+          attemptAmount = await calculateAttemptAmount(`${ip}_ip`, IP_STEP);
+          if (attemptAmount > IP_LIMIT) {
+            throw RequestSuspended("You've reached the limit. Try after 1 hour");
+          }
+      }
+
+      next();
+    } catch (error) {
+      next(error);
     }
-
-    next();
   };
 };
 
