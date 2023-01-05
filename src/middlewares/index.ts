@@ -1,28 +1,35 @@
 import { Request, Response, NextFunction } from "express";
+import { Unauthorized, RequestSuspended } from "../errors";
 
 const TOKEN_LIMIT = process.env.TOKEN_LIMIT;
 const IP_LIMIT = process.env.IP_LIMIT;
 
-console.log(TOKEN_LIMIT);
-
 const antifraudCheck = (type: string) => {
-  const limitRequest = async (req: Request, res: Response, next: NextFunction) => {
-    console.log("limitRequest", type);
-
+  return async (req: Request, res: Response, next: NextFunction) => {
     switch (type) {
       case "token":
-        if (TOKEN_LIMIT === "20") throw new Error("Try after 1 hour");
+        if (TOKEN_LIMIT === "200") throw RequestSuspended("Try after 1 hour");
         break;
       default:
-        if (IP_LIMIT === "10") throw new Error("Try after 1 hour");
+        if (IP_LIMIT === "100") throw RequestSuspended("Try after 1 hour");
     }
 
     next();
   };
-
-  return limitRequest;
 };
 
+const validateToken = (req: Request, res: Response, next: NextFunction) => {
+  const TOKEN = process.env.TOKEN;
+  const token = req.headers.authorization?.split(" ") ?? [];
+  
+  if (token[1] !== TOKEN) {
+    throw Unauthorized("Invalid token");
+  }
+
+  next();
+}
+
 export {
-  antifraudCheck
+  antifraudCheck,
+  validateToken
 };
