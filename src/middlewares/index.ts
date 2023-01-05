@@ -45,4 +45,4 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export { antifraudCheck, validateToken };
+export { antifraudCheck, validateToken, getToken };
